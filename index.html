@@ -1,106 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>RPS</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-        <style>
-            .game-container {
-                margin: auto;
-            }
-            .btn-group {
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-            }
-            .btn-group button {
-                flex: 1;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 class="display-3 text-center mt-5">Rock. Paper. Scissors</h1>
-        <div class="mt-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-6 game-container" id="gs">
-                    <div class="row text-center border p-3 rounded shadow" id="gs-1">
-                        <div class="col p-4 m-2 border border-1 border-dark rounded">
-                            <h4>YOU</h4>
-                            <p id="user-score" class="fs-1">--</p>
-                            <p id="user-choice">Your Choice </p>
-                            <p id="user-result"></p>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-dark" onclick="exec(this)" name="rock">Rock</button>
-                                <button type="button" class="btn btn-dark" onclick="exec(this)" name="paper">Paper</button>
-                                <button type="button" class="btn btn-dark" onclick="exec(this)" name="scissors">Scissors</button>
-                            </div>
+<head>
+    <title>RPS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-group-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-group-wrap button {
+            flex: 1 1 30%;
+            min-width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="display-4 text-center mb-5">Rock. Paper. Scissors</h1>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="row border p-3 rounded shadow text-center">
+                    <!-- User Panel -->
+                    <div class="col-12 col-md-6 p-3 border-end">
+                        <h4>YOU</h4>
+                        <p id="user-score" class="fs-1">--</p>
+                        <p id="user-choice">Your Choice</p>
+                        <p id="user-result"></p>
+                        <div class="btn-group-wrap mt-3">
+                            <button type="button" class="btn btn-dark" onclick="exec(this)" name="rock">Rock</button>
+                            <button type="button" class="btn btn-dark" onclick="exec(this)" name="paper">Paper</button>
+                            <button type="button" class="btn btn-dark" onclick="exec(this)" name="scissors">Scissors</button>
                         </div>
-                        <div class="col p-4 m-2">
-                            <h4>COMPUTER</h4>
-                            <p id="computer-score" class="fs-1">--</p>
-                            <p id="computer-choice">Computer's Choice </p>
-                            <p id="computer-result"></p>
-                        </div>
+                    </div>
+                    <!-- Computer Panel -->
+                    <div class="col-12 col-md-6 p-3">
+                        <h4>COMPUTER</h4>
+                        <p id="computer-score" class="fs-1">--</p>
+                        <p id="computer-choice">Computer's Choice</p>
+                        <p id="computer-result"></p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container text-center mt-4">
-            <button type="reset" class="btn btn-danger w-50" onclick="res()">Reset</button>
+        <div class="text-center mt-4">
+            <button type="reset" class="btn btn-danger px-5" onclick="res()">Reset</button>
         </div>
+    </div>
 
-        <script>
-            var uw = 0, sw = 0; 
+    <script>
+        var uw = 0, sw = 0; 
 
-            function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function exec(m){
+            let flag = true;
+
+            let us = document.getElementById("user-score");
+            let uc = document.getElementById("user-choice");
+            let ur = document.getElementById("user-result");
+
+            let ss = document.getElementById("computer-score");
+            let sc = document.getElementById("computer-choice");
+            let sr = document.getElementById("computer-result");
+
+            let arr = ['rock','paper','scissors'];
+    
+            let bname = m.name;
+            let uv = arr.indexOf(bname.toLowerCase());
+            let cv = getRandomInt(0, 2);
+
+            if ((uv === 0 && cv === 2) || (uv === 1 && cv === 0) || (uv === 2 && cv === 1)) {
+                uw++;
+            } else if (uv !== cv) {
+                sw++;
+                flag = false;
             }
+            
+            us.innerHTML = uw;
+            ss.innerHTML = sw;
 
-            function exec(m){
-                let flag = true;
+            uc.innerHTML = "Your Choice: " + m.name;
+            sc.innerHTML = "Computer Choice: " + arr[cv];
 
-                let us = document.getElementById("user-score");
-                let uc = document.getElementById("user-choice");
-                let ur = document.getElementById("user-result");
+            ur.innerHTML = flag ? "You Won" : "You Lost";
+            sr.innerHTML = flag ? "Computer Lost" : "Computer Won";
+        }
 
-                let ss = document.getElementById("computer-score");
-                let sc = document.getElementById("computer-choice");
-                let sr = document.getElementById("computer-result");
+        function res(){
+            document.getElementById("user-score").innerHTML = "--";
+            document.getElementById("user-choice").innerHTML = "Your Choice";
+            document.getElementById("user-result").innerHTML = "";
 
-                let arr = ['rock','paper','scissors'];
-        
-                let bname = m.name;
-                let uv = arr.indexOf(bname.toLowerCase());
-                let cv = getRandomInt(0, 2);
+            document.getElementById("computer-score").innerHTML = "--";
+            document.getElementById("computer-choice").innerHTML = "Computer's Choice";
+            document.getElementById("computer-result").innerHTML = "";
 
-                if ((uv === 0 && cv === 2) || (uv === 1 && cv === 0) || (uv === 2 && cv === 1)) {
-                    uw++;
-                } else if (uv !== cv) {
-                    sw++;
-                    flag = false;
-                }
-                
-                us.innerHTML = uw;
-                ss.innerHTML = sw;
-
-                uc.innerHTML = "Your Choice: " + m.name;
-                sc.innerHTML = "Computer Choice: " + arr[cv];
-
-                ur.innerHTML = flag ? "You Won" : "You Lost";
-                sr.innerHTML = flag ? "Computer Lost" : "Computer Won";
-            }
-
-            function res(){
-                document.getElementById("user-score").innerHTML = "--";
-                document.getElementById("user-choice").innerHTML = "Your Choice";
-                document.getElementById("user-result").innerHTML = "";
-
-                document.getElementById("computer-score").innerHTML = "--";
-                document.getElementById("computer-choice").innerHTML = "Computer's Choice";
-                document.getElementById("computer-result").innerHTML = "";
-
-                uw = 0;
-                sw = 0;
-            }
-        </script>
-    </body>
+            uw = 0;
+            sw = 0;
+        }
+    </script>
+</body>
 </html>
